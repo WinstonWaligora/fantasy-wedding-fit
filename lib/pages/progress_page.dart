@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'leaderboard_page.dart';
 
 class OverviewPage extends StatefulWidget {
   const OverviewPage({super.key});
@@ -98,8 +99,19 @@ class _OverviewPageState extends State<OverviewPage> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       var db = FirebaseFirestore.instance;
-      db.collection("users").doc(user.uid).set({"mileage": mileage});
+      var userData = {
+        "mileage": mileage,
+        "name": user.displayName
+      };
+      db.collection("users").doc(user.uid).set(userData);
     }
+  }
+
+  void _navigateToLeaderboard(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LeaderboardPage()),
+    );
   }
 
   @override
@@ -117,19 +129,39 @@ class _OverviewPageState extends State<OverviewPage> {
               fit: BoxFit.cover,
             ),
           ),
-          Center(
+          Positioned.fill(
             child: CustomPaint(
               size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
-              painter: MiddleEarthMapPainter(mileage: mileage),
+              painter: MiddleEarthMapPainter(mileage: mileage)
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddMileageDialog(context);
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            onPressed: () {
+              _showAddMileageDialog(context);
+            },
+            icon: const Icon(Icons.add),
+            label: const Text('Add Mileage'),
+            backgroundColor: Colors.orange,
+            foregroundColor: Colors.white,
+            heroTag: 'addMileage',
+          ),
+          const SizedBox(height: 16),
+          FloatingActionButton.extended(
+            onPressed: () {
+              _navigateToLeaderboard(context);
+            },
+            icon: const Icon(Icons.leaderboard),
+            label: const Text('Leaderboard'),
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            heroTag: 'leaderboard',
+          ),
+        ],
       ),
     );
   }
@@ -215,6 +247,14 @@ class MiddleEarthMapPainter extends CustomPainter {
       textDirection: TextDirection.ltr,
     );
     textPainter.layout(minWidth: 0, maxWidth: size.width * 0.2);
+
+    final textBackgroundPaint = Paint()
+      ..color = Colors.black.withOpacity(0.5)
+      ..style = PaintingStyle.fill;
+
+    final textBackgroundRect = Rect.fromLTWH(x + 10, y - 10, textPainter.width, textPainter.height);
+    canvas.drawRect(textBackgroundRect, textBackgroundPaint);
+
     textPainter.paint(canvas, Offset(x + 10, y - 10));
   }
 
