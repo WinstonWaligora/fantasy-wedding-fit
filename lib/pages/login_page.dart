@@ -10,7 +10,10 @@ class LoginPage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: signInWithGoogle,
-          child: const Text('Login with Google'),
+          child: const Text(
+            'Login with Google',
+            style: TextStyle(fontSize: 36),
+          ),
         ),
       ),
     );

@@ -117,51 +117,84 @@ class _OverviewPageState extends State<OverviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Journey to Mordor'),
-      ),
-      body: Stack(
-        children: [
-          // Background image
-          Positioned.fill(
-            child: Image.asset(
-              'assets/fantasy_background.jpg',
-              fit: BoxFit.cover,
+      body: Center(
+        child: FittedBox(
+          fit: BoxFit.cover,
+          child: SizedBox(
+            width: 720, // Set a fixed width
+            height: 1080, // Set a fixed height
+            child: Stack(
+              children: [
+                // Background image
+                Positioned.fill(
+                  child: Image.asset(
+                    'assets/fantasy_background.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                // Title with dimmed background
+                Positioned(
+                  child: Container(
+                    color: Colors.black.withOpacity(0.5),
+                    padding: const EdgeInsets.all(16.0),
+                    child: const Text(
+                      'Journey to Mordor',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 48, // Three times as big
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: CustomPaint(
+                    size: Size(720, 1080), // Match the fixed size
+                    painter: MiddleEarthMapPainter(mileage: mileage),
+                  ),
+                ),
+                // Floating action buttons
+                Positioned(
+                  right: 16,
+                  bottom: 42,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      FloatingActionButton.extended(
+                        onPressed: () {
+                          _showAddMileageDialog(context);
+                        },
+                        icon: const Icon(Icons.add, size: 48), // Twice as big
+                        label: const Text(
+                          'Add Mileage',
+                          style: TextStyle(fontSize: 24), // Twice as big
+                        ),
+                        backgroundColor: Colors.deepOrange,
+                        foregroundColor: Colors.white,
+                        heroTag: 'addMileage',
+                      ),
+                      const SizedBox(height: 24),
+                      FloatingActionButton.extended(
+                        onPressed: () {
+                          _navigateToLeaderboard(context);
+                        },
+                        icon: const Icon(Icons.leaderboard, size: 48), // Twice as big
+                        label: const Text(
+                          'Leaderboard',
+                          style: TextStyle(fontSize: 24), // Twice as big
+                        ),
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        heroTag: 'leaderboard',
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          Positioned.fill(
-            child: CustomPaint(
-              size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
-              painter: MiddleEarthMapPainter(mileage: mileage)
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton.extended(
-            onPressed: () {
-              _showAddMileageDialog(context);
-            },
-            icon: const Icon(Icons.add),
-            label: const Text('Add Mileage'),
-            backgroundColor: Colors.orange,
-            foregroundColor: Colors.white,
-            heroTag: 'addMileage',
-          ),
-          const SizedBox(height: 16),
-          FloatingActionButton.extended(
-            onPressed: () {
-              _navigateToLeaderboard(context);
-            },
-            icon: const Icon(Icons.leaderboard),
-            label: const Text('Leaderboard'),
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-            heroTag: 'leaderboard',
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -176,53 +209,53 @@ class MiddleEarthMapPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = Colors.brown
-      ..strokeWidth = 4.0
+      ..strokeWidth = 8.0
       ..style = PaintingStyle.stroke;
 
     final path = Path();
-    path.moveTo(size.width * 0.14, size.height * 0.48); // The Shire
-    path.lineTo(size.width * 0.35, size.height * 0.63); // Rivendell
-    path.lineTo(size.width * 0.4, size.height * 0.72); // Caradhras
-    path.lineTo(size.width * 0.33, size.height * 0.81);
-    path.lineTo(size.width * 0.32, size.height * 0.92); // Lothlórien
-    path.lineTo(size.width * 0.64, size.height * 0.8); // Rohan
-    path.lineTo(size.width * 0.65, size.height * 0.71); // Rohan
-    path.lineTo(size.width * 0.55, size.height * 0.5); // Parth Galen
-    path.lineTo(size.width * 0.54, size.height * 0.16); // Amon Hen
-    path.lineTo(size.width * 0.68, size.height * 0.05); // Moria
-    path.lineTo(size.width * 0.75, size.height * 0.02); // Mount Doom entry
-    path.lineTo(size.width * 0.85, size.height * 0.1); // Mount Doom
+    path.moveTo(size.width * 0.03, size.height * 0.5); // The Shire
+    path.lineTo(size.width * 0.3, size.height * 0.6); // Rivendell
+    path.lineTo(size.width * 0.35, size.height * 0.65); // Caradhras
+    path.lineTo(size.width * 0.24, size.height * 0.7);
+    path.lineTo(size.width * 0.23, size.height * 0.77); // Lothlórien
+    path.lineTo(size.width * 0.4, size.height * 0.77);
+    path.lineTo(size.width * 0.64, size.height * 0.7); // Rohan
+    path.lineTo(size.width * 0.72, size.height * 0.64);
+    path.lineTo(size.width * 0.58, size.height * 0.49); // Parth Galen
+    path.lineTo(size.width * 0.57, size.height * 0.26); // Amon Hen
+    path.lineTo(size.width * 0.75, size.height * 0.2); // Mount Doom entry
+    path.lineTo(size.width * 0.63, size.height * 0.13); // Mount Doom
 
     canvas.drawPath(path, paint);
 
     // Draw checkpoints
-    _drawCheckpoint(canvas, size, size.width * 0.14, size.height * 0.48, 'The Shire', 0, 'Start your journey');
-    _drawCheckpoint(canvas, size, size.width * 0.35, size.height * 0.63, 'Rivendell', 40, 'Rest and resupply');
-    _drawCheckpoint(canvas, size, size.width * 0.32, size.height * 0.92, 'Lothlórien', 60, 'Receive aid from the Elves');
-    _drawCheckpoint(canvas, size, size.width * 0.64, size.height * 0.8, 'Rohan', 80, 'Receive aid from Rohan');
-    _drawCheckpoint(canvas, size, size.width * 0.55, size.height * 0.5, 'Parth Galen', 100, 'Take last rest');
-    _drawCheckpoint(canvas, size, size.width * 0.54, size.height * 0.16, 'Amon Hen', 120, 'Peer over a place of great vision');
-    _drawCheckpoint(canvas, size, size.width * 0.85, size.height * 0.1, 'Mount Doom', 145, 'Destroy the Ring');
+    _drawCheckpoint(canvas, size, size.width * 0.03, size.height * 0.5, 'The Shire', 0, 'Start your journey');
+    _drawCheckpoint(canvas, size, size.width * 0.3, size.height * 0.6, 'Rivendell', 40, 'Rest and resupply');
+    _drawCheckpoint(canvas, size, size.width * 0.23, size.height * 0.77, 'Lothlórien', 60, 'Receive aid from the Elves');
+    _drawCheckpoint(canvas, size, size.width * 0.64, size.height * 0.7, 'Rohan', 80, 'Receive aid from Rohan');
+    _drawCheckpoint(canvas, size, size.width * 0.58, size.height * 0.49, 'Parth Galen', 100, 'Take last rest');
+    _drawCheckpoint(canvas, size, size.width * 0.57, size.height * 0.26, 'Amon Hen', 120, 'Peer over a place of great vision');
+    _drawCheckpoint(canvas, size, size.width * 0.63, size.height * 0.13, 'Mount Doom', 145, 'Destroy the Ring');
 
     // Draw progress line
     final progressPaint = Paint()
       ..color = Colors.green
-      ..strokeWidth = 6.0
+      ..strokeWidth = 12.0
       ..style = PaintingStyle.stroke;
 
     final progressPath = Path();
-    progressPath.moveTo(size.width * 0.14, size.height * 0.48); // The Shire
-    if (mileage >= 40) progressPath.lineTo(size.width * 0.35, size.height * 0.63); // Rivendell
-    if (mileage >= 45) progressPath.lineTo(size.width * 0.4, size.height * 0.72); // Caradhras
-    if (mileage >= 55) progressPath.lineTo(size.width * 0.33, size.height * 0.81);
-    if (mileage >= 60) progressPath.lineTo(size.width * 0.32, size.height * 0.92); // Rohan
-    if (mileage >= 80) progressPath.lineTo(size.width * 0.64, size.height * 0.8); // Rohan
-    if (mileage >= 85) progressPath.lineTo(size.width * 0.65, size.height * 0.71); // Rohan
-    if (mileage >= 100) progressPath.lineTo(size.width * 0.55, size.height * 0.5); // Parth Galen
-    if (mileage >= 120) progressPath.lineTo(size.width * 0.54, size.height * 0.16); // Amon Hen
-    if (mileage >= 130) progressPath.lineTo(size.width * 0.68, size.height * 0.05); // Moria
-    if (mileage >= 135) progressPath.lineTo(size.width * 0.75, size.height * 0.02); // Mount Doom entry
-    if (mileage >= 145) progressPath.lineTo(size.width * 0.85, size.height * 0.1); // Mount Doom
+    progressPath.moveTo(size.width * 0.03, size.height * 0.5); // The Shire
+    if (mileage >= 40) progressPath.lineTo(size.width * 0.3, size.height * 0.6); // Rivendell
+    if (mileage >= 45) progressPath.lineTo(size.width * 0.35, size.height * 0.65); // Caradhras
+    if (mileage >= 55) progressPath.lineTo(size.width * 0.24, size.height * 0.7);
+    if (mileage >= 60) progressPath.lineTo(size.width * 0.23, size.height * 0.77); // Rohan
+    if (mileage >= 80) progressPath.lineTo(size.width * 0.4, size.height * 0.77); // Rohan
+    if (mileage >= 85) progressPath.lineTo(size.width * 0.64, size.height * 0.7); // Rohan
+    if (mileage >= 100) progressPath.lineTo(size.width * 0.72, size.height * 0.64); // Parth Galen
+    if (mileage >= 120) progressPath.lineTo(size.width * 0.58, size.height * 0.49); // Amon Hen
+    if (mileage >= 130) progressPath.lineTo(size.width * 0.57, size.height * 0.26); // Moria
+    if (mileage >= 135) progressPath.lineTo(size.width * 0.75, size.height * 0.2); // Mount Doom entry
+    if (mileage >= 145) progressPath.lineTo(size.width * 0.63, size.height * 0.13); // Mount Doom
 
     canvas.drawPath(progressPath, progressPaint);
   }
@@ -237,12 +270,12 @@ class MiddleEarthMapPainter extends CustomPainter {
       paint.color = Colors.cyanAccent;
     }
 
-    canvas.drawCircle(Offset(x, y), 15.0, paint);
+    canvas.drawCircle(Offset(x, y), 25.0, paint);
 
     final textPainter = TextPainter(
       text: TextSpan(
         text: '$name\n$mileage miles\n$description',
-        style: TextStyle(color: Colors.white, fontSize: 12),
+        style: TextStyle(color: Colors.white, fontSize: 24), // Increased font size
       ),
       textDirection: TextDirection.ltr,
     );
