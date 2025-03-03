@@ -10,28 +10,50 @@ class LeaderboardPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Leaderboard'),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('users').orderBy('mileage', descending: true).snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Stack(
+        children: [
+          // Background image
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/leaderboard_background.jpg'), // Update the path to your image
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          // Centered Leaderboard content
+          Center(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection('users').orderBy('mileage', descending: true).snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-          final users = snapshot.data!.docs;
+                final users = snapshot.data!.docs;
 
-          return ListView.builder(
-            itemCount: users.length,
-            itemBuilder: (context, index) {
-              final user = users[index];
-              final data = user.data() as Map<String, dynamic>;
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: users.length,
+                  itemBuilder: (context, index) {
+                    final user = users[index];
+                    final data = user.data() as Map<String, dynamic>;
 
-              return ListTile(
-                title: Text(data['name'] ?? 'Anonymous'),
-                subtitle: Text('${data['mileage']} miles'),
-              );
-            },
-          );
-        },
+                    return Container(
+                      color: Colors.black.withOpacity(0.5),
+                      margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text(data['name'] ?? 'Anonymous', style: TextStyle(color: Colors.white)),
+                        subtitle: Text('${data['mileage']} miles', style: TextStyle(color: Colors.white70)),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

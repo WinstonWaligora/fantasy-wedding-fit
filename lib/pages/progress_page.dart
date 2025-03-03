@@ -128,7 +128,7 @@ class _OverviewPageState extends State<OverviewPage> {
                 // Background image
                 Positioned.fill(
                   child: Image.asset(
-                    'assets/fantasy_background.jpg',
+                    'assets/fantasy_map_background.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -285,7 +285,7 @@ class MiddleEarthMapPainter extends CustomPainter {
       ..color = Colors.black.withOpacity(0.5)
       ..style = PaintingStyle.fill;
 
-    final textBackgroundRect = Rect.fromLTWH(x + 10, y - 10, textPainter.width, textPainter.height);
+    final textBackgroundRect = Rect.fromLTWH(x, y - 20, textPainter.width + 20, textPainter.height + 20);
     canvas.drawRect(textBackgroundRect, textBackgroundPaint);
 
     textPainter.paint(canvas, Offset(x + 10, y - 10));

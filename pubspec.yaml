@@ -22,4 +22,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/fantasy_background.jpg
+    - assets/google_icon.png
+    - assets/welcome_background.jpg
+    - assets/fantasy_map_background.jpg
+    - assets/leaderboard_background.jpg
